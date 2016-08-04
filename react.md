@@ -62,3 +62,12 @@ export default (props) => {
 ```
 
 You can use this just like a regular component, but because it has no state and all you're doing it wrapping a component, the syntax is a lot lighter and you don't need to worry about validating propTypes twice.
+
+
+### Component Handler Naming
+
+When naming events inside a component, use the format of `'handle' + event`. For example, in an email form component the event that submits the form should be called `handleSubmit()` and an event that listens to the handleSubmit action should be called `formSubmitted()` or `submittedForm()`.
+
+
+
+
