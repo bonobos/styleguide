@@ -90,4 +90,3 @@ When naming events inside a component, use the format of `'handle' + event`. For
 ### Overriding Styles
 
 If you are using a pre-styled component but need to override those styles for your specific component, wrap the existing component in a new component and use the wrapper component's stylesheet to override those styles.
-
