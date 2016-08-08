@@ -3,18 +3,15 @@
 ## Creating Components
 
 * When creating new components, the outer most container element should be a `Component`.
-* The `Component` class name should always include the name of the component with `-component` at the end, ie. `hello-component`. Each component should also be given the `component` classname as well. If you are combining strings and variables into classnames, import and use the classnames library which concatenates them for you.
-* Use the `pureRenderDecorator` so we can do shallow equality checks on the props. This increases performance by checking new props against old props when deciding whether or not it should rerender.
+* The component `className` should always include the `component` class name and the name of the component with `-component` at the end, ie. `hello-component`. Each component should also be given the `component` classname as well. If you are combining strings and variables into classnames, import and use the classnames library which concatenates it for you.
+* Extend `React.PureComponent` instead of `React.Component` so we can do shallow equality checks against prop changes. This increases performance by checking new props against old props when deciding whether or not it should re-render. This must used in conjunction with `immutable` props since you can't shallow equality check primitive javascript arrays and objects.
 * Proptypes should be as explicit as possible. If the component is expecting a map, explicitly define the keys and their proptypes in that map.
 * You can also set up props from the component's global state instead of the wrapping webpack file by using a connect decorator which will ignore the webpack file and get the initial props directly from the global state. Connector props and props passed in from the parent should be unique.
 * Put `render` as the last method.
 
 ```javascript
-"use strict"
 
 import React from "react"
-import Component from "gramercy/components/component"
-import pureRenderDecorator from "pure-render-decorator"
 import classNames from "clasnames"
 
 function mapStateToProps(state) {
@@ -27,8 +24,7 @@ function mapStateToProps(state) {
 
 @connect(mapStateToProps)
 
-@pureRenderDecorator
-export default class Hello extends React.Component {
+export default class Hello extends React.PureComponent {
   static propTypes = {
     className: React.PropTypes.string,
     name: React.PropTypes.string.isRequired,
@@ -41,7 +37,6 @@ export default class Hello extends React.Component {
   }
 
   static defaultProps = {
-    className: "",
     name: "Jack",
   }
 
@@ -49,14 +44,14 @@ export default class Hello extends React.Component {
     const { className, name } = this.props
 
     return(
-      <Component className={classNames(
+      <div className={classNames(
           "component"
           "hello-component"
           className,
         )}
       >
         Hi {name}!
-      </Component>
+      </div>
     }
 
 ```
@@ -66,7 +61,6 @@ export default class Hello extends React.Component {
 Sometimes you just want to wrap a component to change the props in a reusable way. You might think to create a new component that renders the component you want, but you should probably be using [Stateless Functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions):
 
 ```javascript
-"use strict"
 
 import React from "react"
 import Hello from "gramercy/components/hello"

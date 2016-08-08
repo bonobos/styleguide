@@ -5,3 +5,4 @@ This repository contains our style guides for different languages and technologi
 * [ruby](ruby.md)
 * [javascript](javascript.md)
 * [react](react.md)
+* [redux](redux.md)
