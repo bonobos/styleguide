@@ -1,6 +1,6 @@
 # Bonobos Swift Styleguide
 
-Based on the [raywenderlich/swift-style-guide](https://github.com/raywenderlich/swift-style-guide)    
+Based on the [raywenderlich/swift-style-guide](https://github.com/raywenderlich/swift-style-guide)
 
 Our overarching goals are conciseness, readability, and simplicity.
 
