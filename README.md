@@ -3,6 +3,7 @@
 This repository contains our style guides for different languages and technologies we use:
 
 * [ruby](ruby.md)
+* [html](html.md)
 * [postcss](postcss.md)
 * [javascript](javascript.md)
 * [react](react.md)
