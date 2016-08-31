@@ -61,22 +61,35 @@ export default class Hello extends React.PureComponent {
 Sometimes you just want to wrap a component to change the props in a reusable way. You might think to create a new component that renders the component you want, but you should probably be using [Stateless Functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions):
 
 ```javascript
-
 import React from "react"
-import Hello from "gramercy/components/hello"
+import Modal from "gramercy/components/modal"
+import classNames from "classnames"
+import defaultStyles from "gramercy_css/components/full_screen_modal.pcss"
 
-export default (props) => {
-  const { className, firstName, lastName, ...other } = props
-  const fullName = `${firstName} ${lastName}`
+const FullScreenModal = (props) => {
+  const { className, ...other } = props
 
   return (
-    <Hello
-      className="hello-first-last-name-component"
-      name={fullName}
+    <Modal
+      className={classNames(
+        "full-screen-modal-component",
+        className,
+      )}
       {...other}
     />
   )
 }
+
+FullScreenModal.propTypes = {
+  className: React.PropTypes.string,
+  styles: React.PropTypes.object,
+}
+
+FullScreenModal.defaultProps = {
+  styles: defaultStyles,
+}
+
+export default FullScreenModal
 ```
 
 You can use this just like a regular component, but because it has no state and all you're doing it wrapping a component, the syntax is a lot lighter and you don't need to worry about validating propTypes twice.
