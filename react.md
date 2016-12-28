@@ -54,6 +54,10 @@ export default class Hello extends React.PureComponent {
 
 ```
 
+### Presentational vs Container Components
+
+Also called Smart vs Dumb Components, is outlined in detail [here](https://medium.com/@dan_abramov/smart-and-dumb-components-7ca2f9a7c7d0#.kbocrg9qf) by Dan Abramov. We've started to do this. Try to design your dumb components first in storybook, so you can work with them in isolation. This might help you design the props to be more reusable. Then when you want to inject state, create a smart container that wraps the dumb component and provides it with callbacks and props it needs to render.
+
 ### Wrapping a Component
 
 Sometimes you just want to wrap a component to change the props in a reusable way. You might think to create a new component that renders the component you want, but you should probably be using [Stateless Functions](https://facebook.github.io/react/docs/reusable-components.html#stateless-functions):
