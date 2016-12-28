@@ -2,11 +2,9 @@
 
 ## Creating Components
 
-* When creating new components, the outer most container element should be a `Component`.
 * The component `className` should always include the `component` class name and the name of the component with `-component` at the end, ie. `hello-component`. Each component should also be given the `component` classname as well. If you are combining strings and variables into classnames, import and use the classnames library which concatenates it for you.
-* Extend `React.PureComponent` instead of `React.Component` so we can do shallow equality checks against prop changes. This increases performance by checking new props against old props when deciding whether or not it should re-render. This must used in conjunction with `immutable` props since you can't shallow equality check primitive javascript arrays and objects.
+* Extend `React.PureComponent` instead of `React.Component` so we can do shallow equality checks against prop changes. This increases performance by checking new props against old props when deciding whether or not it should re-render. This must used in conjunction with `immutable` props since you can't shallow equality check primitive javascript arrays and objects. Extending `React.Component` is fine if you know you want to override the `shouldComponentUpdate` function.
 * Proptypes should be as explicit as possible. If the component is expecting a map, explicitly define the keys and their proptypes in that map.
-* You can also set up props from the component's global state instead of the wrapping webpack file by using a connect decorator which will ignore the webpack file and get the initial props directly from the global state. Connector props and props passed in from the parent should be unique.
 * Put `render` as the last method.
 
 ```javascript
