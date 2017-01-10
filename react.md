@@ -3,7 +3,6 @@
 ## Creating Components
 
 * The component `className` should always include the `component` class name and the name of the component with `-component` at the end, ie. `hello-component`. Each component should also be given the `component` classname as well. If you are combining strings and variables into classnames, import and use the classnames library which concatenates it for you.
-* Extend `React.PureComponent` instead of `React.Component` so we can do shallow equality checks against prop changes. This increases performance by checking new props against old props when deciding whether or not it should re-render. This must used in conjunction with `immutable` props since you can't shallow equality check primitive javascript arrays and objects. Extending `React.Component` is fine if you know you want to override the `shouldComponentUpdate` function.
 * Proptypes should be as explicit as possible. If the component is expecting a map, explicitly define the keys and their proptypes in that map.
 * Put `render` as the last method.
 
@@ -53,6 +52,27 @@ export default class Hello extends React.PureComponent {
     }
 
 ```
+
+### Stateless functional component vs PureComponent vs Component
+
+Use [stateless functional component](https://facebook.github.io/react/blog/2015/10/07/react-v0.14.html#stateless-functional-components) as your default.
+
+Unless, you need...
+
+1. To use state.
+2. Component life cycle methods.
+3. To use `ref`.
+
+then extend [PureComponent](https://facebook.github.io/react/docs/react-api.html#react.purecomponent).
+
+`PureComponent` does shallow equality checks against prop changes. This increases performance by checking new props against old props when deciding whether or not it should re-render. This must used in conjunction with `immutable` props since you can't shallow equality check primitive javascript arrays and objects.
+
+Unless, you also need...
+
+1. To override or add a custom `shouldComponentUpdate` method.
+
+then extend [Component](https://facebook.github.io/react/docs/react-api.html#react.component).
+
 
 ### Presentational vs Container Components
 
