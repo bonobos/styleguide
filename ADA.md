@@ -1,8 +1,8 @@
-# ADA
+# ADA 
 ## HTML Elements
 ### `<img>` Images
 - Images have alternate text that can be read by screen reader software Level **A**
-- Images are not used when text can acheive the same purpose  **AA**
+- Images are not used when text can acheive the same purpose (aka don't ever have words on an image) **AA**
 
 ```html
 <img class="washed-chinos" alt="Blue Washed Chinos" src="http://www.bonobos.com/images/blue-washed-chino"/>
@@ -27,3 +27,7 @@ If the form does not have a visible label, you can use the `aria-label` tag for 
     <input id=""email_address name="emailAddress" type="email" aria-label="Email Address" />
 </form>
 ```
+
+### `<svg>` SVGs
+- Images have alternate text that can be read by screen reader software Level **A**
+- Images are not used when text can acheive the same purpose  **AA**
