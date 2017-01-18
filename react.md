@@ -41,13 +41,13 @@ export default class Hello extends React.PureComponent {
     const { className, name } = this.props
 
     return(
-      <div className={classNames(
+      <div className={ classNames(
           "component"
           "hello-component"
           className,
-        )}
+        ) }
       >
-        Hi {name}!
+        Hi { name }!
       </div>
     }
 
@@ -86,29 +86,25 @@ Sometimes you just want to wrap a component to change the props in a reusable wa
 import React from "react"
 import Modal from "gramercy/components/modal"
 import classNames from "classnames"
-import defaultStyles from "gramercy_css/components/full_screen_modal.pcss"
+import styles from "gramercy_css/components/full_screen_modal.pcss"
 
 const FullScreenModal = (props) => {
   const { className, ...other } = props
 
   return (
     <Modal
-      className={classNames(
+      className={ classNames(
         "full-screen-modal-component",
         className,
-      )}
-      {...other}
+        styles.component
+      ) }
+      { ...other }
     />
   )
 }
 
 FullScreenModal.propTypes = {
   className: React.PropTypes.string,
-  styles: React.PropTypes.object,
-}
-
-FullScreenModal.defaultProps = {
-  styles: defaultStyles,
 }
 
 export default FullScreenModal
@@ -124,4 +120,4 @@ When naming events inside a component, use the format of `'handle' + event`. For
 
 ### Overriding Styles
 
-If you are using a pre-styled component but need to override those styles for your specific component, wrap the existing component in a new component and use the wrapper component's stylesheet to override those styles.
+If you are using a pre-styled component but need to override those styles for your specific component, include a `layout` prop which accepts a string value and have the component handle representations of your component. As long as the component JSX can handle the alternate style, you should try to have that component style multiple versions of itself. Sometimes the changes you want to make are too different, in that case you'll want to create a different component.
