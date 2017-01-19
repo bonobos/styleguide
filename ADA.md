@@ -1,5 +1,6 @@
 # ADA 
-### * Note **A** versus **AA** indicates compliance level.
+#### Note 
+**A** versus **AA** indicates compliance level.
 
 ## HTML Elements
 
