@@ -1,16 +1,17 @@
 # ADA 
+### * Note **A** versus **AA** indicates compliance level.
 
 ## HTML Elements
 
 ### Images `<img>` 
-- Images have alternate text that can be read by screen reader software Level **A**
+- Images have alternate text that can be read by screen reader software **A**
 - Images are not used when text can acheive the same purpose (aka don't ever have words on an image) **AA**
 
 ```html
 <img class="washed-chinos" alt="Blue Washed Chinos" src="http://www.bonobos.com/images/blue-washed-chino"/>
 ````
 
-### Forms and Inputs `<form>` &   `<input>`
+### Forms and Inputs `<form>` & `<input>`
 - Invalid form input is identified to the user **A**
 - Forms have labels and legends that can be read by screen reader software  **A**
 -  Keyboard focus is visible and clear. **AA**
@@ -33,7 +34,7 @@ If the form does not have a visible label, you can use the `aria-label` tag for 
 ```
 
 ### SVGs `<svg>` 
-- Images have alternate text that can be read by screen reader software Level **A**
+- Images have alternate text that can be read by screen reader software **A**
 - Images are not used when text can acheive the same purpose  **AA**
 
 
