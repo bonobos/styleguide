@@ -23,10 +23,10 @@ We are running all js code (client & server) through [babel](https://babeljs.io/
 
 ## Variables
 
-### :x: Don't use `var`
+##### :x: Don't use `var`
 `var` is mutable, and globall scoped. There shouldn't be any use case for using it.
 
-### :white_check_mark: Use `const` as default
+##### :white_check_mark: Use `const` as default
 We should always favor immutability. It makes the code safer, and easier to reason about. If you find yourself re-assigning a variable, it's a good indication the code could be written in a more functional manner. For instance, instead of
 ```js
 // bad
@@ -42,7 +42,7 @@ It could be re-written
 const foo = (n == 1) ? "bar" : "baz"
 ```
 
-### :large_orange_diamond: Use `let` sparingly
+##### :large_orange_diamond: Use `let` sparingly
 There are some instances where it makes sense to re-assign a variable. In those cases, use `let`, as it's scoped to the nearest function (opposed to `var`, which is scoped globally)
 
 ## Function Declaration 
@@ -55,7 +55,7 @@ In javascript, the `function` keyword can be used to declare _and_ name a functi
 
 The `function` keyword should be used when declaring a function outside of any lexical scope. 
 
-#### :white_check_mark: Use for standalone functions (with no reference to `this`)
+##### :white_check_mark: Use for standalone functions (with no reference to `this`)
 ```js
 // good
 function makeSqaure(n) {
@@ -67,7 +67,7 @@ makeSquare(2) // 4
 
 Avoid using the `function` keyword without a name (such as a callback) or storing into a variable. 
 
-#### :x: Avoid using for callbacks
+##### :x: Avoid using for callbacks
 ```js
 // bad
 setTimeout(function() {
@@ -75,7 +75,7 @@ setTimeout(function() {
 }, 1000)
 ```
 
-#### :x: Avoid using for inline or storing into a variable
+##### :x: Avoid using for inline or storing into a variable
 ```js
 // bad
 const myFunction = function() {
@@ -101,7 +101,7 @@ function sayHi() {
 }.bind(this)
 ```
 
-#### :white_check_mark: Use for callbacks & anonymous functions
+##### :white_check_mark: Use for callbacks & anonymous functions
 ```js
 // good
 setTimeout(() => {
@@ -109,20 +109,20 @@ setTimeout(() => {
 }, 100)
 ```
 
-#### :white_check_mark: Use for storing function in varaible
+##### :white_check_mark: Use for storing function in varaible
 ```js
 // good
 const makeSquare = (n) => { return n * n }
 ```
 
-#### :white_check_mark: use parentheses for arguments
+##### :white_check_mark: use parentheses for arguments
 Parentheses are optional for 0 or 1 arguments. Always use parentheses for consistency.
 ```js
 // good
 const sayHi = () => { console.log("Hi") }
 ```
 
-#### :white_check_mark: favor using implicit returns
+##### :white_check_mark: favor using implicit returns
 With arrow functions, you can specificy an _implicit_ return if the function has only one execution statement, and the function is not defined with braces. For instance, the following are equivalent
 ```js
 const makeSquare = (n) => { return n * n }
@@ -142,7 +142,7 @@ list.map(
 
 ### Exporting
 
-#### :white_check_mark: Place `default export` at bottom of file
+##### :white_check_mark: Place `default export` at bottom of file
 When specifying a `default` export, make the export line the last line in the file.
 
 ```js
@@ -153,7 +153,7 @@ function someFunction () {
 export default someFunction
 ```
 
-#### :white_check_mark: use `function` declaration for exporting functions
+##### :white_check_mark: use `function` declaration for exporting functions
 There's no need to implicity `bind` exported functions to where they're delcared. This also prevents the context from being changed (if needed)
 
 ```js
