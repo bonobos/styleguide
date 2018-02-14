@@ -24,7 +24,7 @@ We are running all js code (client & server) through [babel](https://babeljs.io/
 ## Variables
 
 ##### :x: Don't use `var`
-`var` is mutable, and globall scoped. There shouldn't be any use case for using it.
+`var` is mutable, and globally scoped. There shouldn't be any use case for using it.
 
 ##### :white_check_mark: Use `const` as default
 We should always favor immutability. It makes the code safer, and easier to reason about. If you find yourself re-assigning a variable, it's a good indication the code could be written in a more functional manner. For instance, instead of
@@ -46,6 +46,8 @@ const foo = (n == 1) ? "bar" : "baz"
 There are some instances where it makes sense to re-assign a variable. In those cases, use `let`, as it's scoped to the nearest function (opposed to `var`, which is scoped globally)
 
 ## Function Declaration 
+
+**note: I'm still on the fence about this one. We could also do arrow functions everywhere, and _only_ do `function` if you need control over how `this` is used (which should be pretty rare). I'm just not sure about the performance implication of using arrow functions (when transpiling, it adds a `.bind(this)` to every function)
 
 With ES6, there are now multiple ways to declare functions in javascript. There are _slight_ differences in behavior with different function delcarations, so we'll cover that here and when they should be used.
 
@@ -379,7 +381,6 @@ export default myComponent
 ```
 
 ##### :white_check_mark: Components should be either _feature specific_ or _base_ components
-
 To organize components, we should label a component as something that's a base-building block (button, form, list, icon, etc...), or a _feature specific_ component (homepage, product, category, etc...). Every component should fall into some directory under `/components`
 
 ```js
@@ -394,3 +395,84 @@ To organize components, we should label a component as something that's a base-b
 // highline/componnets/myComponent.js
 ```
 
+##### :white_check_mark: Use `on` prefix for callbacks in components. Use `handle` for callback handlers in containers
+When exposing a prop that gets called based on some action (`onClick`, `onChange` etc..), use the `on` prefix when defining the prop in a component. Use `handle` when defining the prop in a container.
+
+```js
+// good
+<MyComponent
+  onClick={ this.componentClicked }
+  onChange={ this.componentChanged }
+/>
+
+const mapDispatchToProps = {
+  handleInputChange() {
+    dispatch(somethingChanged())
+  }
+}
+
+// bad
+<MyComponent
+  clicked={ this.componentClicked }
+  handleChange={ this.componentChanged }
+/>
+```
+
+# Redux
+
+## Naming Conventions
+
+### ActionTypes
+All actions that get dispatched should be declared in the **_past tesnse_**. That is, they should represent the result of some action _that has already happened_. If you find yourself naming an action for something that _should_ happen, think about what is the actual thing that is triggering the need for that action.
+
+```js
+// good
+PRODUCT_FETCH_STARTED
+PRODUCT_FETCH_FAILED
+PRODUCT_FETCH_SUCCEEDED
+CART_OPEN_CLICKED
+
+// bad
+FETCH_NEW_PRODUCTS
+OPEN_CART
+OPEN_MODAL
+```
+
+### Actions
+There are two types actions that can be dispatched to redux. Those are `action creators` (return an `Object`), and `action thunks` or, "`async`" actions (return a `function`). 
+
+##### :white_check_mark: Action creators should be prefixed with the actionType
+Action Creators are just functions that return a plain javascript `Object`, that has a `type` field. Convention is to use the action type prefix in the name.
+
+```js
+// good
+export function productDetailAddToCartClicked(sku) {
+  return {
+    type: ActionTypes.PRODUCT_DETAIL_ADD_TO_CART_CLICKED,
+    sku,
+  }
+}
+
+// bad
+export function addToCartClicked(sku) {
+  return {
+    type: ActionTypes.PRODUCT_DETAIL_ADD_TO_CART_CLICKED,
+    sku,
+  }
+}
+```
+
+##### :white_check_mark: Thunks (`async` actions) should be postfixed with `Async`
+Async actions are functions that return a `function` to be evaulated at a later time. It doesn't necessarily mean there needs to be some type of `i/o` operation, but just that there is some additional logic based on the application state to be performed. Async actions can also _dispatch other actions_. The action type prefix is not needed, since there isn't a 1-to-1 correlation of action & action type 
+
+**(but maybe we should keep the prefix for consistency?)**
+
+```js
+export function addToCartAsync(sku) {
+  return function(getState, dispatch) {
+    dispatch(productDetailAddToCartStarted())
+    ...
+    dispatch(productDetailAddToCartSuccess())
+  }
+}
+```
