@@ -26,7 +26,7 @@ const foo = (n == 1) ? "bar" : "baz"
 ##### :large_orange_diamond: Use `let` sparingly
 There are some instances where it makes sense to re-assign a variable. In those cases, use `let`, as it's scoped to the nearest function (opposed to `var`, which is scoped globally)
 
-## Function Declaration (https://github.com/bonobos/styleguide/issues/5)
+## Function Declaration
 
 With ES6, there are now multiple ways to declare functions in javascript. There are _slight_ differences in behavior with different function declarations, so we'll cover that here and when they should be used.
 
@@ -141,7 +141,7 @@ export function myFunction() {
 
 ## Dependencies
 
-### Exporting (https://github.com/bonobos/styleguide/issues/6)
+### Exporting
 
 ##### :white_check_mark: Place `default export` at bottom of file for any React Component.
 When specifying a `default` export, make the export line the last line in the file.
@@ -252,7 +252,7 @@ responses.forEach((response) => {
 
 # React
 
-## Importing React (https://github.com/bonobos/styleguide/issues/7)
+## Importing React
 
 Importing react: 
 ```js
@@ -263,7 +263,7 @@ isn't required due to our build process, but we should add it to the top of each
 
 ## Declaring a Component
 
-##### :white_check_mark: Use `React.PureComponent` if you need state, `ref`, or lifecycle functions (https://github.com/bonobos/styleguide/issues/8)
+##### :white_check_mark: Use `React.PureComponent` if you need state, `ref`, or lifecycle functions
 
 If you need an instance of a react component (tapping into state or a lifecycle function), use a class that extends `React.PureComponent`. 
 
@@ -305,7 +305,7 @@ const myComponent = ({
 export default myComponent
 ```
 
-##### :white_check_mark: Use `arrow` syntax to bind a function to a react component (https://github.com/bonobos/styleguide/issues/9)
+##### :white_check_mark: Use `arrow` syntax to bind a function to a react component
 A common pattern is to have an instance function on a component that is bound to that instance. By declaring the function using the `arrow () => {}` syntax, the function will be bound to the created instance. This avoids the need to bind the function explicitly.
 
 ```js
@@ -333,7 +333,7 @@ class MyComponent extends React.PureComponent {
 }
 ```
 
-##### :white_check_mark: Order fields & functions by react lifecycle on a Component (https://github.com/bonobos/styleguide/issues/10)
+##### :white_check_mark: Order fields & functions by react lifecycle on a Component
 
 Order functions in the same order that the react-lifeccyle happens. That is:
 
@@ -375,7 +375,7 @@ When declaring props (either in `propTypes` or on a Component, always sort alpha
 />
 ```
 
-##### :white_check_mark: Destructure props & state (https://github.com/bonobos/styleguide/issues/11)
+##### :white_check_mark: Destructure props & state
 
 Arguments to functions are not declared as const, so destructring the props in the `render` method is useful for forcing immutability, but also help with checking against typos and using undeclared variables.
 
@@ -463,7 +463,7 @@ const mapDispatchToProps = {
 
 ## Naming Conventions
 
-### ActionTypes (https://github.com/bonobos/styleguide/issues/12)
+### ActionTypes
 All actions that get dispatched should be declared in the **_past tense_**. That is, they should represent the result of some action _that has already happened_. If you find yourself naming an action for something that _should_ happen, think about what is the actual thing that is triggering the need for that action.
 
 ```js
