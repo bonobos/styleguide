@@ -32,7 +32,7 @@ With ES6, there are now multiple ways to declare functions in javascript. There 
 
 ### Arrow Functions `() => {}`
 
-ES6 introduced the concept of an `arrow` function. That is, the ability to create a function without the use of the `function` keyword. An arrow function behaves the same as a non-arrow function, _with the exception_ that the function is always bound the context where it's _defined_, and not where it's called. 
+ES6 introduced the concept of an `arrow` function. That is, the ability to create a function without the use of the `function` keyword. An arrow function behaves the same as a non-arrow function, _with the exception_ that the function is always bound the context where it's _defined_, and not where it's called.
 
 For instance, declaring an `arrow` function:
 ```js
@@ -112,7 +112,7 @@ function makeSquare(n) {
 makeSquare(2) // 4
 ```
 
-Avoid using the `function` keyword without a name (such as a callback) or storing into a variable. 
+Avoid using the `function` keyword without a name (such as a callback) or storing into a variable.
 
 ##### :x: Avoid using for callbacks
 ```js
@@ -155,7 +155,7 @@ export default MyComponent
 ```
 
 ### Ordering
-Imports can be specified in any order, but it might be good to have rules around how they should be declared to offer some sanity. 
+Imports can be specified in any order, but it might be good to have rules around how they should be declared to offer some sanity.
 
 If anyone has any suggestions, that would be great, but I've sort of been doing the following:
 
@@ -254,7 +254,7 @@ responses.forEach((response) => {
 
 ## Importing React
 
-Importing react: 
+Importing react:
 ```js
 import React from "react"
 ```
@@ -263,56 +263,98 @@ isn't required due to our build process, but we should add it to the top of each
 
 ## Declaring a Component
 
-##### :white_check_mark: Use `React.PureComponent` if you need state, `ref`, or lifecycle functions
+##### :white_check_mark: Prefer function components over class components
 
-If you need an instance of a react component (tapping into state or a lifecycle function), use a class that extends `React.PureComponent`. 
+With the [introduction of hooks in React 16.8](https://reactjs.org/docs/hooks-intro.html), function components can now manage state and hook into lifecycle events.
 
-_exceptions:_ Components in `layouts` or `admin` can be exempt from this rule.
+Function components are preferred for the following reason:
+- Less overhead (React doesn't need to maintain an instance of a class in memory)
+- Classes are harder to reason about. Javascript's `this` behavior differs from most languages.
+- Function components have a more concise syntax.
 
-*note:* `PureComponent` will implement `componentShouldUpdate` with a shallow comparison of `props`, to determine if the `render()` function should be called. For the most part, this is fine since we are using `immutablejs`, but this should be kept in mind if the component is not re-rendering when it should.
+```js
+// components/user_profile.js
+import React, { useEffect, useState } from "react"
 
-```jsx
-class MyComponent extends React.PureComponent {
-  state = {
-    name: "bonobos",
+const UserProfile = ({ userId }) => {
+  // State management using the useState hook
+  const [user, setUser] = useState({}) // Declare `user` state variable, its corresponding setter function, and its initial value
+  const [loading, setLoading] = useState(true) // Declare `loading` state variable, its corresponding setter function, and its initial value
+
+  // Lifecycle management using the useEffect hook
+  // Declare an effect which fetches user details based on the userId prop.
+  // In terms of traditional React lifecycle methods, the useEffect hook combines
+  // componentDidMount, componentDidUpdate, and componentWillUnmount.
+  useEffect(() => {
+    setLoading(true)
+    UsersApi.fetch(userId).then((userDetails) => {
+      setUser(userDetails)
+      setLoading(false)
+    })
+  }, [userId]) // Only run this effect when the value of userId changes
+
+  if (loading) {
+    return <h3>Loading...</h3>
+  } else {
+    return <h2>{ user.name } - { user.email }</h2>
+  }
+}
+
+export default UserProfile
+```
+
+##### :white_check_mark: Extract reusable state logic into custom hooks
+
+Hooks enable the reuse of state logic. In the example above, the state logic can be extracted out into a custom hook so that it can be reused across multiple components:
+
+```js
+// hooks/use_user_details.js
+import { useEffect, useState } from "react"
+
+// Declare custom hook which manages the retrieval of user details
+export const useUserDetails(userId) => {
+  const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    UsersApi.fetch(userId).then((userDetails) => {
+      setUser(userDetails)
+      setLoading(false)
+    })
   }
 
-  render() {
-    const { name } = this.state
-
-    return (
-      <span>Hi { name }</span>
-    )
-  }
+  // Expose the loading status and user details to the consumer
+  return [loading, user]
 }
 ```
 
-##### :white_check_mark: Use a _stateless functional_ component if you don't need state or lifecycle functions
+```js
+// components/user_profile.js
+import React, { useEffect, useState } from "react"
+import { useUserDetails } from "hooks/use_user_details"
 
-If you don't need state, or any of React's built in functions, you can use a function to define the component instead of a class. Some benefits to this approach:
-  * Less overhead (react doesn't need to maintain an instance of a class in memory)
-  * Simplicity (easier to read, reason about since there's not instance or state based logic)
-  
-To create a stateless functional component, define a function that takes props, and returns a React (or DOM) element
+const UserProfile = ({ userId }) => {
+  const [loading, user] = useUserDetails(userId)
 
-```jsx
-const myComponent = ({
- name,
-}) => (
- <span>{ name }</span>
-)
+  if (loading) {
+    return <h3>Loading...</h3>
+  } else {
+    return <h2>{ user.name } - { user.email }</h2>
+  }
+}
 
-export default myComponent
+export default UserProfile
 ```
 
-##### :white_check_mark: Use `arrow` syntax to bind a function to a react component
+##### :white_check_mark: Within a class component, use `arrow` syntax to bind a function to a react component
 A common pattern is to have an instance function on a component that is bound to that instance. By declaring the function using the `arrow () => {}` syntax, the function will be bound to the created instance. This avoids the need to bind the function explicitly.
 
 ```js
 class MyComponent extends React.PureComponent {
   constructor(props) {
     super(props)
-    
+
     // bad
     this.myFunction = this.myFunction.bind(this)
   }
@@ -333,9 +375,9 @@ class MyComponent extends React.PureComponent {
 }
 ```
 
-##### :white_check_mark: Order fields & functions by react lifecycle on a Component
+##### :white_check_mark: Within a class component, order fields & functions by react lifecycle on a Component
 
-Order functions in the same order that the react-lifeccyle happens. That is:
+Order functions in the same order that the react-lifecyle happens. That is:
 
 ```
 optional static methods
@@ -459,6 +501,28 @@ const mapDispatchToProps = {
 />
 ```
 
+##### :white_check_mark: Use the `use` prefix for custom hooks
+
+When creating a custom hook, use the `use` prefix when defining the custom hook.
+
+```js
+// Good
+export const useUserDetails(userId) => {
+  const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    UsersApi.fetch(userId).then((userDetails) => {
+      setUser(userDetails)
+      setLoading(false)
+    })
+  }
+
+  return [loading, user]
+}
+```
+
 # Redux
 
 ## Naming Conventions
@@ -486,12 +550,12 @@ We have a specific naming convention for actions that correspond to different st
 _STARTED     // before request is sent
 _SUCCEEEDED  // on request success
 _FAILED      // on request error
-_COMPLETED   // after request done (regardless of success/error) 
+_COMPLETED   // after request done (regardless of success/error)
 ```
 
 
 ### Actions
-There are two types actions that can be dispatched to redux. Those are `action creators` (return an `Object`), and `action thunks` or, "`async`" actions (return a `function`). 
+There are two types actions that can be dispatched to redux. Those are `action creators` (return an `Object`), and `action thunks` or, "`async`" actions (return a `function`).
 
 ##### :white_check_mark: Action creators should be prefixed with the actionType
 Action Creators are just functions that return a plain javascript `Object`, that has a `type` field. Convention is to use the action type prefix in the name.
@@ -511,7 +575,7 @@ export const addToCartClicked = (sku) => ({
 ```
 
 ##### :white_check_mark: Thunks (`async` actions) should be postfixed with `Async`
-Async actions are functions that return a `function` to be evaulated at a later time. It doesn't necessarily mean there needs to be some type of `i/o` operation, but just that there is some additional logic based on the application state to be performed. Async actions can also _dispatch other actions_. The action type prefix is not needed, since there isn't a 1-to-1 correlation of action & action type 
+Async actions are functions that return a `function` to be evaluated at a later time. It doesn't necessarily mean there needs to be some type of `i/o` operation, but just that there is some additional logic based on the application state to be performed. Async actions can also _dispatch other actions_. The action type prefix is not needed, since there isn't a 1-to-1 correlation of action & action type
 
 **(but maybe we should keep the prefix for consistency?)**
 
